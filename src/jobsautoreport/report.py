@@ -29,3 +29,17 @@ class Reporter:
             return None
         avg = int(sum([job.duration for job in jobs_list]) / len(jobs_list))
         return timedelta(seconds=avg)
+    
+
+    class JobData:
+        def __init__(self, success_count: int, failed_count: int, success_rate: float) -> None:
+            self.success_count = success_count
+            self.failed_count = failed_count
+            self.success_rate = success_rate
+    
+    class JobAggregator:
+        def __init__(self, querier: Querier) -> None:
+            self._querier = querier
+        
+        def by_job_type(self, type: str) -> JobData:
+            
