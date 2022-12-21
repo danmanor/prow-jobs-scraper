@@ -1,4 +1,5 @@
 from enum import Enum
+from typing import NewType
 
 
 class JobType(Enum):
@@ -11,3 +12,6 @@ class JobType(Enum):
 class JobState(Enum):
     SUCCESS = "success"
     FAILURE = "failure"
+
+
+StepState = NewType("StepState", JobState)(JobState)

@@ -21,6 +21,9 @@ def test_send_report_should_successfully_call_slack_api_with_expected_message_fo
             ("fake-job-2", 24),
             ("fake-job-1", 12),
         ],
+        number_of_successful_machine_leases=1,
+        number_of_unsuccessful_machine_leases=2,
+        total_number_of_machine_leased=3,
     )
 
     expected_blocks_periodic = [
@@ -143,6 +146,26 @@ def test_send_report_should_successfully_call_slack_api_with_expected_message_fo
         },
     ]
 
+    expected_blocks_equinix = [
+        {
+            "type": "header",
+            "text": {
+                "type": "plain_text",
+                "text": "Equinix",
+                "emoji": True,
+            },
+        },
+        {
+            "type": "section",
+            "fields": [
+                {
+                    "type": "mrkdwn",
+                    "text": f"*Number of machines leased:* {report.total_number_of_machine_leased} - \n:slack-green: {report.number_of_successful_machine_leases} :x: {report.number_of_unsuccessful_machine_leases}",
+                }
+            ],
+        },
+    ]
+
     test_channel = "test-channel"
     test_thread_time_stamp = {"ts": "test-thread-time_stamp"}
     web_client_mock = MagicMock()
@@ -160,5 +183,10 @@ def test_send_report_should_successfully_call_slack_api_with_expected_message_fo
     web_client_mock.chat_postMessage.assert_any_call(
         channel=test_channel,
         blocks=expected_blocks_presubmit,
+        thread_ts=test_thread_time_stamp["ts"],
+    )
+    web_client_mock.chat_postMessage.assert_any_call(
+        channel=test_channel,
+        blocks=expected_blocks_equinix,
         thread_ts=test_thread_time_stamp["ts"],
     )

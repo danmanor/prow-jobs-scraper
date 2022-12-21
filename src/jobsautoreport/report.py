@@ -3,9 +3,9 @@ from typing import Any, Callable
 
 from pydantic import BaseModel
 
-from jobsautoreport.models import JobState, JobType
+from jobsautoreport.models import JobState, JobType, StepState
 from jobsautoreport.query import Querier
-from prowjobsscraper.event import JobDetails
+from prowjobsscraper.event import JobDetails, StepEvent
 
 
 class Report(BaseModel):
@@ -22,6 +22,9 @@ class Report(BaseModel):
     success_rate_for_e2e_or_subsystem_presubmit_jobs: float
     top_10_failing_e2e_or_subsystem_presubmit_jobs: list[tuple[str, float]]
     top_5_most_triggered_e2e_or_subsystem_jobs: list[tuple[str, int]]
+    number_of_successful_machine_leases: int
+    number_of_unsuccessful_machine_leases: int
+    total_number_of_machine_leased: int
 
     def __str__(self) -> str:
         return (
@@ -37,6 +40,9 @@ class Report(BaseModel):
             f"success_rate_for_e2e_or_subsystem_presubmit_jobs: {self.success_rate_for_e2e_or_subsystem_presubmit_jobs}\n"
             f"top_10_failed_e2e_or_subsystem_presubmit_jobs: {self.top_10_failing_e2e_or_subsystem_presubmit_jobs}\n"
             f"top_5_most_triggered_e2e_or_subsystem_jobs: {self.top_5_most_triggered_e2e_or_subsystem_jobs}\n"
+            f"number_of_successful_machine_leases: {self.number_of_successful_machine_leases}\n"
+            f"number_of_unsuccessful_machine_leases: {self.number_of_unsuccessful_machine_leases}\n"
+            f"total_number_of_machine_leased: {self.total_number_of_machine_leased}\n"
         )
 
 
@@ -114,7 +120,8 @@ class Reporter:
         return "e2e" in job.name or "subsystem" in job.name
 
     def get_report(self, from_date: datetime, to_date: datetime) -> Report:
-        jobs = self._querier.query_all_jobs(from_date, to_date)
+        jobs = self._querier.query_jobs(from_date, to_date)
+        step_events = self._querier.query_step_events(from_date, to_date)
         rehearsal_jobs = [job for job in jobs if self._is_rehearsal(job)]
         subsystem_and_e2e_jobs = [
             job
@@ -164,4 +171,19 @@ class Reporter:
             top_5_most_triggered_e2e_or_subsystem_jobs=self._get_top_n_jobs(
                 subsystem_and_e2e_jobs, self._get_job_triggers_count, 5, True
             ),
+            number_of_successful_machine_leases=len(
+                [
+                    step_event
+                    for step_event in step_events
+                    if step_event.step.state == StepState.SUCCESS.value
+                ]
+            ),
+            number_of_unsuccessful_machine_leases=len(
+                [
+                    step_event
+                    for step_event in step_events
+                    if step_event.step.state == StepState.FAILURE.value
+                ]
+            ),
+            total_number_of_machine_leased=len(step_events),
         )

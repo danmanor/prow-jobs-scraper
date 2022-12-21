@@ -24,13 +24,20 @@ class SlackReporter:
         logger.info("Message sent successfully")
 
         time_stamp = response["ts"]
-        blocks = self._format_comment(report)
+        blocks = self._format_presubmit_comment(report)
         logger.debug("comment format finished successfully")
         response = self._client.chat_postMessage(
             channel=self._channel_id, blocks=blocks, thread_ts=time_stamp
         )
         response.validate()
-        logger.info("Comment sent successfully")
+        logger.info("Presubmit comment sent successfully")
+        blocks = self._format_equinix_comment(report)
+        logger.debug("comment format finished successfully")
+        response = self._client.chat_postMessage(
+            channel=self._channel_id, blocks=blocks, thread_ts=time_stamp
+        )
+        response.validate()
+        logger.info("Equinix comment sent successfully")
 
     @classmethod
     def _format_message(cls, report: Report) -> list[dict[str, Any]]:
@@ -72,7 +79,7 @@ class SlackReporter:
         return result
 
     @classmethod
-    def _format_comment(cls, report: Report) -> list[dict[str, Any]]:
+    def _format_presubmit_comment(cls, report: Report) -> list[dict[str, Any]]:
         result: list[dict[str, Any]] = [
             {
                 "type": "header",
@@ -125,6 +132,30 @@ class SlackReporter:
                 ),
             }
         )
+
+        return result
+
+    @staticmethod
+    def _format_equinix_comment(report: Report) -> list[dict[str, Any]]:
+        result: list[dict[str, Any]] = [
+            {
+                "type": "header",
+                "text": {
+                    "type": "plain_text",
+                    "text": "Equinix",
+                    "emoji": True,
+                },
+            },
+            {
+                "type": "section",
+                "fields": [
+                    {
+                        "type": "mrkdwn",
+                        "text": f"*Number of machines leased:* {report.total_number_of_machine_leased} - \n:slack-green: {report.number_of_successful_machine_leases} :x: {report.number_of_unsuccessful_machine_leases}",
+                    }
+                ],
+            },
+        ]
 
         return result
 

@@ -20,12 +20,13 @@ def main() -> None:
 
     client = OpenSearch(os_host, http_auth=(os_usr, os_pwd))
 
-    index_name = config.ES_JOB_INDEX + "-*"
-
     now = datetime.now()
     a_week_ago = now - timedelta(weeks=1)
 
-    querier = Querier(client, index_name)
+    jobs_index = config.ES_JOB_INDEX + "-*"
+    steps_index = config.ES_STEP_INDEX + "-*"
+
+    querier = Querier(client, jobs_index, steps_index)
     reporter = Reporter(querier)
 
     report = reporter.get_report(from_date=a_week_ago, to_date=now)
