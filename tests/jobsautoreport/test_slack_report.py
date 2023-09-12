@@ -406,7 +406,7 @@ def test_format_cost_by_machine_type_metrics():
         machine_metrics, threshold=0.02
     )
     assert types == ["Others", "c1 small x86_64", "c2 large x86_64", "m1 xlarge x86_64"]
-    assert costs == [8, 500, 300, 100]
+    assert costs == [8, 100, 300, 500]
 
 
 def test_format_cost_by_job_type_metrics():
@@ -423,4 +423,4 @@ def test_format_cost_by_job_type_metrics():
         job_type_metrics, threshold=0.02
     )
     assert types == ["Others", "batch", "presubmit"]
-    assert costs == [10, 1000, 500]
+    assert costs == [10, 500, 1000]

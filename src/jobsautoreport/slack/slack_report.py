@@ -305,7 +305,7 @@ class SlackReporter:
                     types.append(machine_type.replace(".", " "))
                     costs.append(int(cost))
 
-        return types, costs
+        return types, list(sorted(costs))
 
     @staticmethod
     def _create_cost_by_job_type_metrics(
@@ -337,4 +337,4 @@ class SlackReporter:
                     types.append(job_type)
                     costs.append(int(cost))
 
-        return types, costs
+        return types, list(sorted(costs))
