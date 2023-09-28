@@ -33,6 +33,7 @@ dynamic = ["version"]
 [project.scripts]
 prow-jobs-scraper = "prowjobsscraper.main:main"
 jobs-auto-report = "jobsautoreport.main:main"
+remove-duplications-elasticsearch = "remove_duplications_elasticsearch.main:main"
 
 [project.optional-dependencies]
 test-runner = [
@@ -56,15 +57,15 @@ lint = [
 [tool.tox]
 legacy_tox_ini = """
 [tox]
-envlist = clean,python3.9,report
+envlist = clean,python3.11,report
 
 [testenv]
 usedevelop=True
 commands = pytest --cov=src --cov-append --cov-report=term-missing --junitxml=junit-{envname}.xml --junit-prefix={envname} {posargs}
 deps = .[unit-tests]
 depends =
-    {python3.9}: clean
-    report: python3.9
+    {python3.11}: clean
+    report: python3.11
 
 [testenv:report]
 deps = .[coverage]

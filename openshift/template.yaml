@@ -9,8 +9,8 @@ objects:
     name: prow-jobs-scraper-assisted-project-usages
   spec:
     concurrencyPolicy: ${PROW_JOBS_CONCURRENCY_POLICY}
-    schedule: ${PROW_JOBS_SCRAPER_SCHEDULE}
-    suspend: ${{PROW_JOBS_SCRAPER_SUSPEND}}
+    schedule: ${PROW_JOBS_SCRAPER_ASSISTED_PROJECT_USAGES_SCHEDULE}
+    suspend: ${{PROW_JOBS_SCRAPER_ASSISTED_PROJECT_USAGES_SUSPEND}}
     jobTemplate:
       spec:
         ttlSecondsAfterFinished: 10800 # keep last 3 runs (3 * 1h)
@@ -75,8 +75,8 @@ objects:
     name: prow-jobs-scraper-single-node-usages
   spec:
     concurrencyPolicy: ${PROW_JOBS_CONCURRENCY_POLICY}
-    schedule: ${PROW_JOBS_SCRAPER_SCHEDULE}
-    suspend: ${{PROW_JOBS_SCRAPER_SUSPEND}}
+    schedule: ${PROW_JOBS_SCRAPER_SINGLE_NODES_USAGES_SCHEDULE}
+    suspend: ${{PROW_JOBS_SCRAPER_SINGLE_NODES_USAGES_SUSPEND}}
     jobTemplate:
       spec:
         ttlSecondsAfterFinished: 10800 # keep last 3 runs (3 * 1h)
@@ -210,6 +210,7 @@ objects:
                   secretKeyRef:
                     key: ${JOBS_AUTO_REPORT_SLACK_CHANNEL_ID_KEY}
                     name: ${JOBS_AUTO_REPORT_SLACK_CHANNEL_ID_NAME}
+
 - apiVersion: batch/v1
   kind: CronJob
   metadata:
@@ -286,6 +287,56 @@ objects:
                     key: ${JOBS_AUTO_REPORT_SLACK_CHANNEL_ID_KEY}
                     name: ${JOBS_AUTO_REPORT_SLACK_CHANNEL_ID_NAME}
 
+- apiVersion: batch/v1
+  kind: CronJob
+  metadata:
+    name: remove-elastic-duplications
+  spec:
+    concurrencyPolicy: ${REMOVE_ELASTICSEARCH_DUPLICATIONS_CONCURRENCY_POLICY}
+    schedule: ${REMOVE_ELASTICSEARCH_DUPLICATIONS_SCHEDULE}
+    suspend: ${{REMOVE_ELASTICSEARCH_DUPLICATIONS_SUSPEND}}
+    jobTemplate:
+      spec:
+        ttlSecondsAfterFinished: 10800 # keep last 3 runs (3 * 1h)
+        backoffLimit: 3
+        template:
+          spec:
+            restartPolicy: OnFailure
+            serviceAccountName: assisted-service
+            containers:
+            - name: remove-elastic-duplications
+              image: ${IMAGE_NAME}:${IMAGE_TAG}
+              imagePullPolicy: ${IMAGE_PULL_POLICY}
+              command: 
+              - remove-elastic-duplications
+              resources:
+                limits:
+                  cpu: 500m
+                  memory: 2000Mi
+                requests:
+                  cpu: 300m
+                  memory: 400Mi
+              env:
+              - name: LOG_LEVEL
+                value: "${REMOVE_ELASTICSEARCH_DUPLICATIONS_LOG_LEVEL}"
+              - name: ES_INDEX
+                value: "${REMOVE_ELASTICSEARCH_DUPLICATIONS_ES_COMPARABLE_INDEX}"
+              - name: ES_URL
+                valueFrom:
+                  secretKeyRef:
+                    key: endpoint
+                    name: assisted-installer-elasticsearch
+              - name: ES_USER
+                valueFrom:
+                  secretKeyRef:
+                    key: master_user_name
+                    name: elastic-master-credentials
+              - name: ES_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    key: master_user_password
+                    name: elastic-master-credentials
+
 parameters:
 - name: IMAGE_NAME
   value: "quay.io/app-sre/prow-jobs-scraper"
@@ -303,10 +354,14 @@ parameters:
   value: "INFO"
 - name: IMAGE_PULL_POLICY
   value: "Always"
-- name: PROW_JOBS_SCRAPER_SUSPEND
+- name: PROW_JOBS_SCRAPER_ASSISTED_PROJECT_USAGES_SUSPEND
   value: "false"
-- name: PROW_JOBS_SCRAPER_SCHEDULE
-  value: "@hourly"
+- name: PROW_JOBS_SCRAPER_ASSISTED_PROJECT_USAGES_SCHEDULE
+  value: "0 1-23/2 * * *"  # every odd hour
+- name: PROW_JOBS_SCRAPER_SINGLE_NODES_USAGES_SUSPEND
+  value: "false"
+- name: PROW_JOBS_SCRAPER_SINGLE_NODES_USAGES_SCHEDULE
+  value: "0 0-22/2 * * *"  # every even hour
 - name: PROW_JOBS_SCRAPER_EQUINIX_SECRET_NAME
   value: prow-jobs-scraper-equinix-secret
 - name: PROW_JOBS_SCRAPER_EQUINIX_ASSISTED_PROJECT_ID_KEY
@@ -353,3 +408,13 @@ parameters:
   value: "Forbid"
 - name: JOBS_AUTO_REPORT_CONCURRENCY_POLICY
   value: "Forbid"
+- name: REMOVE_ELASTICSEARCH_DUPLICATIONS_CONCURRENCY_POLICY
+  value: "Forbid"
+- name: REMOVE_ELASTICSEARCH_DUPLICATIONS_SCHEDULE
+  value: "@daily"
+- name: REMOVE_ELASTICSEARCH_DUPLICATIONS_SUSPEND
+  value: "false"
+- name: REMOVE_ELASTICSEARCH_DUPLICATIONS_LOG_LEVEL
+  value: "info"
+- name: REMOVE_ELASTICSEARCH_DUPLICATIONS_ES_COMPARABLE_INDEX
+  required: true

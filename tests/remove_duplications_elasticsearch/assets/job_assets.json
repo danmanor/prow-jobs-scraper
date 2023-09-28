@@ -1,0 +1,187 @@
+[
+{
+  "_index": "jobs-2023.37",
+  "_type": "_doc",
+  "_id": "Xihc0YoBQ56QycBCjKVY",
+  "_version": 1,
+  "_score": null,
+  "_source": {
+    "job": {
+      "build_id": "1706634324306038784",
+      "cloud_cluster_profile": null,
+      "cloud": null,
+      "context": "images",
+      "duration": 757,
+      "equinix": null,
+      "name": "branch-ci-openshift-assisted-service-release-4.15-images",
+      "refs": {
+        "base_ref": "release-4.15",
+        "org": "openshift",
+        "pull": null,
+        "repo": "assisted-service"
+      },
+      "start_time": "2023-09-26T11:38:25+00:00",
+      "state": "success",
+      "type": "postsubmit",
+      "url": "https://prow.ci.openshift.org/view/gs/origin-ci-test/logs/branch-ci-openshift-assisted-service-release-4.15-images/1706634324306038784",
+      "variant": null
+    }
+  },
+  "fields": {
+    "job.start_time": [
+      "2023-09-26T11:38:25.000Z"
+    ]
+  },
+  "sort": [
+    1695728305000
+  ]
+},
+{
+  "_index": "jobs-2023.37",
+  "_type": "_doc",
+  "_id": "Xihc0YoBQ56QycBabcde",
+  "_version": 1,
+  "_score": null,
+  "_source": {
+    "job": {
+      "build_id": "1706634324306038784",
+      "cloud_cluster_profile": null,
+      "cloud": null,
+      "context": "images",
+      "duration": 757,
+      "equinix": null,
+      "name": "branch-ci-openshift-assisted-service-release-4.15-images",
+      "refs": {
+        "base_ref": "release-4.15",
+        "org": "openshift",
+        "pull": null,
+        "repo": "assisted-service"
+      },
+      "start_time": "2023-09-26T11:38:25+00:00",
+      "state": "success",
+      "type": "postsubmit",
+      "url": "https://prow.ci.openshift.org/view/gs/origin-ci-test/logs/branch-ci-openshift-assisted-service-release-4.15-images/1706634324306038784",
+      "variant": null
+    }
+  },
+  "fields": {
+    "job.start_time": [
+      "2023-09-26T11:38:25.000Z"
+    ]
+  },
+  "sort": [
+    1695728305000
+  ]
+},
+{
+  "_index": "jobs-2023.38",
+  "_type": "_doc",
+  "_id": "Xyhc0846Q56QycBCj174",
+  "_version": 1,
+  "_score": null,
+  "_source": {
+    "job": {
+      "build_id": "1706632461292670976",
+      "cloud_cluster_profile": "packet-assisted",
+      "cloud": "packet-edge",
+      "context": "e2e-metal-assisted",
+      "duration": 1205,
+      "equinix": null,
+      "name": "pull-ci-openshift-assisted-installer-master-edge-e2e-metal-assisted",
+      "refs": {
+        "base_ref": "master",
+        "org": "openshift",
+        "pull": "728",
+        "repo": "assisted-installer"
+      },
+      "start_time": "2023-09-26T11:31:01+00:00",
+      "state": "failure",
+      "type": "presubmit",
+      "url": "https://prow.ci.openshift.org/view/gs/origin-ci-test/pr-logs/pull/openshift_assisted-installer/728/pull-ci-openshift-assisted-installer-master-edge-e2e-metal-assisted/1706632461292670976",
+      "variant": "edge"
+    }
+  },
+  "fields": {
+    "job.start_time": [
+      "2023-09-26T11:31:01.000Z"
+    ]
+  },
+  "sort": [
+    1695727861000
+  ]
+},
+{
+  "_index": "jobs-2023.38",
+  "_type": "_doc",
+  "_id": "Xyhc0Y12356QycB456VY",
+  "_version": 1,
+  "_score": null,
+  "_source": {
+    "job": {
+      "build_id": "1706632461292670976",
+      "cloud_cluster_profile": "packet-assisted",
+      "cloud": "packet-edge",
+      "context": "e2e-metal-assisted",
+      "duration": 1205,
+      "equinix": null,
+      "name": "pull-ci-openshift-assisted-installer-master-edge-e2e-metal-assisted",
+      "refs": {
+        "base_ref": "master",
+        "org": "openshift",
+        "pull": "728",
+        "repo": "assisted-installer"
+      },
+      "start_time": "2023-09-26T11:31:01+00:00",
+      "state": "failure",
+      "type": "presubmit",
+      "url": "https://prow.ci.openshift.org/view/gs/origin-ci-test/pr-logs/pull/openshift_assisted-installer/728/pull-ci-openshift-assisted-installer-master-edge-e2e-metal-assisted/1706632461292670976",
+      "variant": "edge"
+    }
+  },
+  "fields": {
+    "job.start_time": [
+      "2023-09-26T11:31:01.000Z"
+    ]
+  },
+  "sort": [
+    1695727861000
+  ]
+},
+{
+  "_index": "jobs-2023.39",
+  "_type": "_doc",
+  "_id": "abcc0Y12356Q12345615",
+  "_version": 1,
+  "_score": null,
+  "_source": {
+    "job": {
+      "build_id": "9326632937392670921",
+      "cloud_cluster_profile": "packet-assisted",
+      "cloud": "packet-edge",
+      "context": "e2e-metal-assisted",
+      "duration": 1205,
+      "equinix": null,
+      "name": "pull-ci-openshift-assisted-installer-master-edge-e2e-metal-assisted",
+      "refs": {
+        "base_ref": "master",
+        "org": "openshift",
+        "pull": "728",
+        "repo": "assisted-installer"
+      },
+      "start_time": "2023-09-26T11:31:01+00:00",
+      "state": "failure",
+      "type": "presubmit",
+      "url": "https://prow.ci.openshift.org/view/gs/origin-ci-test/pr-logs/pull/openshift_assisted-installer/728/pull-ci-openshift-assisted-installer-master-edge-e2e-metal-assisted/1706632461292670976",
+      "variant": "edge"
+    }
+  },
+  "fields": {
+    "job.start_time": [
+      "2023-09-26T11:31:01.000Z"
+    ]
+  },
+  "sort": [
+    1695727861000
+  ]
+}
+]

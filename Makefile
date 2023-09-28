@@ -37,7 +37,7 @@ mypy:
 	mypy --non-interactive --install-types src/
 
 lint-manifest:
-	oc process --local=true -f openshift/template.yaml --param IMAGE_TAG=foobar | oc apply --dry-run=client --validate -f -
+	oc process --local=true -f openshift/template.yaml --param IMAGE_TAG=foobar --param REMOVE_ELASTICSEARCH_DUPLICATIONS_ES_COMPARABLE_INDEX=foobar | oc apply --dry-run=client -f -
 
 lint: mypy format
 	git diff --exit-code
